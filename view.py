@@ -30,7 +30,7 @@ def make_main():
     ]
     return sg.Window("multiaxial_graph_application",main_layout,finalize=True,font='Monospace 18',resizable=True)
 
-def import_xdata():
+def import_main_data():
     # ------------ サブウィンドウ(x)作成 ------------
     flame_import = sg.Frame('import', [
         [sg.Multiline(key='-Data-',size=(15,20)),sg.Button('import')]
@@ -165,16 +165,18 @@ while True:
         break
     
     elif event == 'setting_x':
+        xdata = import_main_data()
         print(xdata)
-        xdata = import_xdata()
         try:
             imported_x = [float(x) for x in xdata.split(',')]
         except:
             continue
         
     elif event == 'setting_y':
-        tmp_y = import_ydata()
-        ydata = tmp_y[0]
+        # tmp_y = import_main_data()
+        # ydata = tmp_y[0]
+        ydata = import_main_data()
+        print(ydata)
         try:
             imported_y = [float(y) for y in ydata.split(',')]
         except:
