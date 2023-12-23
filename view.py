@@ -49,12 +49,8 @@ def import_xdata():
     res = []
     result = []
     
-    #used_axis = 0
-    
     while True:
         event, values = data_window.read()
-        
-        #bbg = judge_axis(values)
         
         if event == 'close' or event  == sg.WIN_CLOSED:
             try:
