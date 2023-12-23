@@ -207,7 +207,6 @@ while True:
             if tmp_y2[1] == 1:
                 ax.plot(imported_x, imported_y2, marker='o', alpha=0.8, color='tab:red')
             elif tmp_y2[1] == 2:
-                #ax2 = ax.twinx()
                 ax2.plot(imported_x, imported_y2, marker='o', alpha=0.8, color='tab:red')
             
             #ax.plot(imported_x, imported_y2, marker='o', alpha=0.8, color='tab:red')
