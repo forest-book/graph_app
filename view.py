@@ -139,12 +139,14 @@ window = make_main()
 # 埋め込むfigを作成
 fig = plt.figure(figsize=(12,8))
 ax = fig.add_subplot(111)
+ax2 = ax.twinx()
 plt.grid()
 plt.xlabel("x")
 plt.ylabel("y")
 
 xdata = []
 ydata = []
+ydata2 = []
 
 #x_axis = np.arange(10.2, 11.3, 0.2)
 #y_axis = np.arange(3.5, 7.3, 0.5)
@@ -198,13 +200,18 @@ while True:
             print('---------------------------------------------------------------------------')
             type(imported_y)
             print(imported_y)
+            print('----------------------------------------------------------------------------')
+            print(imported_y2)
+            print('-------------------------------------------------------------------------')
+            print(tmp_y2[1])
+            print('//////////////////////////////////////////////////////////////////////////////////')
             
             ax.plot(imported_x, imported_y, marker='o', alpha=0.8)
             
             if tmp_y2[1] == 1:
                 ax.plot(imported_x, imported_y2, marker='o', alpha=0.8, color='tab:red')
             elif tmp_y2[1] == 2:
-                ax2 = ax.twinx()
+                #ax2 = ax.twinx()
                 ax2.plot(imported_x, imported_y2, marker='o', alpha=0.8, color='tab:red')
             
             #ax.plot(imported_x, imported_y2, marker='o', alpha=0.8, color='tab:red')
