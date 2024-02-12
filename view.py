@@ -37,7 +37,7 @@ def import_main_data():
     ])
     
     flame_settings = sg.Frame('settings', [
-        [sg.Text('data label :'),sg.InputText(key='-LABEL-',size=(15,5))]
+        [sg.Text('data label :'),sg.InputText(key='-LABEL-',size=(15,5),enable_events=True)]
     ], vertical_alignment='top')
     
     data_layout = [
@@ -48,9 +48,12 @@ def import_main_data():
     data_window = sg.Window('import xdata', data_layout, finalize=True,font='Monospace 18')
     res = []
     result = []
+    data_label = ''
     
     while True:
         event, values = data_window.read()
+        
+        data_label = values['-LABEL-']
         
         if event == 'close' or event  == sg.WIN_CLOSED:
             try:
@@ -63,11 +66,12 @@ def import_main_data():
             res = values['-Data-']
             result = res.replace("\n", ",")
             print(type(result))
+            sg.popup(data_label)
             
     data_window.close()
     return result
 
-def import_ydata():
+def import_sub_data():
     # ------------ サブウィンドウ(y)作成 ------------
     flame_import = sg.Frame('import', [
         [sg.Multiline(key='-Data-',size=(15,20)),sg.Button('import')]
@@ -76,10 +80,8 @@ def import_ydata():
     radio_main = sg.Radio(text='main',group_id='axis',default=True,key='-MAIN-',enable_events=True)
     radio_second = sg.Radio(text='second',group_id='axis',default=False,key='-SECOND-',enable_events=True)
     
-    def judge_axis(values): #changed
-        selected_axis = 1
-        #print(values['-MAIN-'])
-        #print(values['-SECOND-'])
+    def judge_axis(values): 
+        selected_axis = 1   #デフォルトは主軸
         
         if values['-MAIN-']:
             selected_axis = 1
@@ -89,7 +91,7 @@ def import_ydata():
         return selected_axis
     
     flame_settings = sg.Frame('settings', [
-        [sg.Text('data label :'),sg.InputText(key='-LABEL-',size=(15,5))],
+        [sg.Text('data label :'),sg.InputText(key='-LABEL-',size=(15,5),enable_events=True)],
         [sg.Text('Axis to be used:')],
         [radio_main,radio_second]
     ], vertical_alignment='top')
@@ -102,11 +104,13 @@ def import_ydata():
     data_window = sg.Window('import data', data_layout, finalize=True,font='Monospace 18',disable_close=True)
     res = []
     result = []
-    
-    used_axis = 0           #changed
+    used_axis = 0 
+    data_label = ''
     
     while True:
         event, values = data_window.read()
+        
+        data_label = values['-LABEL-']
         
         used_axis = judge_axis(values)
         
@@ -123,9 +127,8 @@ def import_ydata():
             result = res.replace("\n", ",")
             print(type(result))
             
-            sg.popup(used_axis) #changed
-            
-        
+            sg.popup(used_axis)
+            sg.popup(data_label) 
             
     data_window.close()
     return result,used_axis
@@ -135,7 +138,8 @@ window = make_main()
 # 埋め込むfigを作成
 fig = plt.figure(figsize=(12,8))
 ax = fig.add_subplot(111)
-ax2 = ax.twinx()
+#ax2 = ax.twinx()
+#ax3 = ax.twinx()
 plt.grid()
 plt.xlabel("x")
 plt.ylabel("y")
@@ -173,8 +177,6 @@ while True:
             continue
         
     elif event == 'setting_y':
-        # tmp_y = import_main_data()
-        # ydata = tmp_y[0]
         ydata = import_main_data()
         print(ydata)
         try:
@@ -183,7 +185,7 @@ while True:
             continue
         
     elif event == 'setting_y2':
-        tmp_y2 = import_ydata()
+        tmp_y2 = import_sub_data()
         ydata2 = tmp_y2[0]
         try:
             imported_y2 = [float(y2) for y2 in ydata2.split(',')]
@@ -203,17 +205,21 @@ while True:
             print('-------------------------------------------------------------------------')
             print(tmp_y2[1])
             print('//////////////////////////////////////////////////////////////////////////////////')
+            plt.cla()
+            
             
             ax.plot(imported_x, imported_y, marker='o', alpha=0.8)
             
             if tmp_y2[1] == 1:
                 ax.plot(imported_x, imported_y2, marker='o', alpha=0.8, color='tab:red')
+                ax2.axis('off')
             elif tmp_y2[1] == 2:
+                ax2 = ax.twinx()
                 ax2.plot(imported_x, imported_y2, marker='o', alpha=0.8, color='tab:red')
             
             #ax.plot(imported_x, imported_y2, marker='o', alpha=0.8, color='tab:red')
             fig_agg.draw()
-            plt.pause(0.01)
+            #plt.pause(0.01)
         except Exception as e:
             print(e)
             sg.popup(e)
