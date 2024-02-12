@@ -209,18 +209,3 @@ ax4.tick_params(labelsize=14)
 ax.legend(handles=[p1,p2,p3,p4,p5,p6,p7],loc='lower right',fontsize=14)
 
 plt.show()
-# fig_agg = draw_figure(window["-CANVAS-"].TKCanvas, fig)
-# fig_agg.draw()
-
-# while True:
-#     event,values = window.read()
-    
-#     if event == sg.WIN_CLOSED:
-#         break
-    
-#     elif event == 'save':
-#         fig_agg.draw()
-#         #plt.show()
-#         plt.pause(0.01)
-    
-# window.close()
